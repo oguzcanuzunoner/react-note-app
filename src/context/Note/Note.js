@@ -18,12 +18,12 @@ const NoteProvider = ({ children }) => {
     return setNotes(filtered);
   };
 
-  //Burada sorun var
   const editNotes = (id, value) => {
     let filtered = notes.filter((item) => item.id === id);
+    let oldValues = notes.filter((item) => item.id !== id);
     filtered[0].note = value;
-    const newNotes = [...notes, filtered];
-    return setNotes(newNotes);
+
+    localStorage.setItem("notes", JSON.stringify([...oldValues, ...filtered]));
   };
 
   const handleNotes = () => {
