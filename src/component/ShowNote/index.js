@@ -3,12 +3,15 @@ import { Container, Row, Col } from "react-bootstrap";
 import { useNote } from "../../context/Note/Note";
 import { MdDelete } from "react-icons/md";
 import { RiInputMethodLine } from "react-icons/ri";
-import { useState } from "react";
 
 const ShowNote = () => {
   const { notes, deleteNote, editNotes } = useNote();
-  const [edit, setEdit] = useState(false);
-  const [editNote, setEditNote] = useState("");
+  const changeNote = (obj) => {
+    if (obj.id !== "" && obj.note !== "") {
+      editNotes(obj.id, obj.note);
+    }
+  };
+
   return (
     <Container className="mt-2 " style={{ height: "500px" }}>
       <Row className="bg-white">
@@ -23,18 +26,15 @@ const ShowNote = () => {
       {notes.map((note) => (
         <Row className="bg-white" key={note.id}>
           <Col className="text-center mb-2">
-            {!edit && <span>{note.note}</span>}
-            {edit && (
-              <input
-                value={editNote}
-                onChange={(e) => setEditNote(e.target.value)}
-                style={{ border: 0 }}
-                onBlur={() => editNotes(note.id, editNote)}
-              />
-            )}
+            <span>{note.note}</span>
           </Col>
           <Col className="text-center mb-2">
-            <RiInputMethodLine onClick={() => setEdit(!edit)} />
+            <RiInputMethodLine
+              onClick={() => {
+                const newValue = prompt("Please write new note");
+                changeNote({ id: note.id, note: newValue });
+              }}
+            />
           </Col>
           <Col className="text-center mb-2">
             <span onClick={() => deleteNote(note.id)}>
