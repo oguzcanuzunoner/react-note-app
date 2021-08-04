@@ -1,12 +1,19 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 
 const NoteContext = createContext();
 
 const NoteProvider = ({ children }) => {
   const [note, setNote] = useState("");
-  const [notes, setNotes] = useState(
-    JSON.parse(localStorage.getItem("notes")) || []
-  );
+
+  const [notes, setNotes] = useState([]);
+
+  useEffect(() => {
+    const local = JSON.parse(localStorage.getItem("notes"));
+    if (local) setNotes(local);
+  }, []);
+  useEffect(() => {
+    if (notes.length > 0) localStorage.setItem("notes", JSON.stringify(notes));
+  }, [notes]);
 
   const deleteNote = (id) => {
     const filtered = notes.filter((item) => item.id !== id);
@@ -26,7 +33,7 @@ const NoteProvider = ({ children }) => {
   const handleNotes = () => {
     if (note !== "" || note !== null || note.trim() !== "") {
       const newValue = { id: Math.floor(Math.random() * 10000), note };
-      setNotes((prevState) => [...prevState, newValue]);
+      setNotes([...notes, newValue]);
       setNote("");
     }
   };
