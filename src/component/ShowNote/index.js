@@ -32,7 +32,7 @@ const ShowNote = () => {
             <RiInputMethodLine
               onClick={() => {
                 const newValue = prompt("Please write new note");
-                changeNote({ id: note.id, note: newValue });
+                if (newValue) changeNote({ id: note.id, note: newValue });
               }}
             />
           </Col>
