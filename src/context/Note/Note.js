@@ -19,6 +19,7 @@ const NoteProvider = ({ children }) => {
     const filtered = notes.filter((item) => item.id !== id);
     setNotes(filtered);
     localStorage.setItem("notes", JSON.stringify([...filtered]));
+    if (notes.length === 1) localStorage.removeItem("notes");
   };
 
   const editNotes = (id, value) => {
